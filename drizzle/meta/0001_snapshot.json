@@ -1,0 +1,545 @@
+{
+  "id": "5897b3b5-cce3-4516-a399-787342e510de",
+  "prevId": "174707d1-1f0e-4254-8d55-5c84b77d858c",
+  "version": "7",
+  "dialect": "postgresql",
+  "tables": {
+    "public.DEVELOPERS_PUBLISHERS": {
+      "name": "DEVELOPERS_PUBLISHERS",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "identity": {
+            "type": "always",
+            "name": "DEVELOPERS_PUBLISHERS_id_seq",
+            "schema": "public",
+            "increment": "1",
+            "startWith": "1",
+            "minValue": "1",
+            "maxValue": "2147483647",
+            "cache": "1",
+            "cycle": false
+          }
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "DEVELOPERS_PUBLISHERS_name_unique": {
+          "name": "DEVELOPERS_PUBLISHERS_name_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "name"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.FRIENDSHIP": {
+      "name": "FRIENDSHIP",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "identity": {
+            "type": "always",
+            "name": "FRIENDSHIP_id_seq",
+            "schema": "public",
+            "increment": "1",
+            "startWith": "1",
+            "minValue": "1",
+            "maxValue": "2147483647",
+            "cache": "1",
+            "cycle": false
+          }
+        },
+        "user1_id": {
+          "name": "user1_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "user2_id": {
+          "name": "user2_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "are_friends": {
+          "name": "are_friends",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "messages": {
+          "name": "messages",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "FRIENDSHIP_user1_id_PLAYERS_id_fk": {
+          "name": "FRIENDSHIP_user1_id_PLAYERS_id_fk",
+          "tableFrom": "FRIENDSHIP",
+          "tableTo": "PLAYERS",
+          "columnsFrom": [
+            "user1_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
+        },
+        "FRIENDSHIP_user2_id_PLAYERS_id_fk": {
+          "name": "FRIENDSHIP_user2_id_PLAYERS_id_fk",
+          "tableFrom": "FRIENDSHIP",
+          "tableTo": "PLAYERS",
+          "columnsFrom": [
+            "user2_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {
+        "messages": {
+          "name": "messages",
+          "value": "validate_messages(\"FRIENDSHIP\".\"messages\", (ARRAY[\"FRIENDSHIP\".\"user1_id\"::TEXT, \"FRIENDSHIP\".\"user2_id\"::TEXT])::TEXT[])"
+        },
+        "users": {
+          "name": "users",
+          "value": "\"FRIENDSHIP\".\"user1_id\" < \"FRIENDSHIP\".\"user2_id\""
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "public.GAMES": {
+      "name": "GAMES",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "identity": {
+            "type": "always",
+            "name": "GAMES_id_seq",
+            "schema": "public",
+            "increment": "1",
+            "startWith": "1",
+            "minValue": "1",
+            "maxValue": "2147483647",
+            "cache": "1",
+            "cycle": false
+          }
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "price": {
+          "name": "price",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "developer": {
+          "name": "developer",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "publisher": {
+          "name": "publisher",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "GAMES_developer_DEVELOPERS_PUBLISHERS_id_fk": {
+          "name": "GAMES_developer_DEVELOPERS_PUBLISHERS_id_fk",
+          "tableFrom": "GAMES",
+          "tableTo": "DEVELOPERS_PUBLISHERS",
+          "columnsFrom": [
+            "developer"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
+        },
+        "GAMES_publisher_DEVELOPERS_PUBLISHERS_id_fk": {
+          "name": "GAMES_publisher_DEVELOPERS_PUBLISHERS_id_fk",
+          "tableFrom": "GAMES",
+          "tableTo": "DEVELOPERS_PUBLISHERS",
+          "columnsFrom": [
+            "publisher"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "GAMES_name_unique": {
+          "name": "GAMES_name_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "name"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.GAMETOTAGS": {
+      "name": "GAMETOTAGS",
+      "schema": "",
+      "columns": {
+        "game_id": {
+          "name": "game_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "tag_id": {
+          "name": "tag_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "GAMETOTAGS_game_id_GAMES_id_fk": {
+          "name": "GAMETOTAGS_game_id_GAMES_id_fk",
+          "tableFrom": "GAMETOTAGS",
+          "tableTo": "GAMES",
+          "columnsFrom": [
+            "game_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
+        },
+        "GAMETOTAGS_tag_id_TAGS_id_fk": {
+          "name": "GAMETOTAGS_tag_id_TAGS_id_fk",
+          "tableFrom": "GAMETOTAGS",
+          "tableTo": "TAGS",
+          "columnsFrom": [
+            "tag_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {
+        "GAMETOTAGS_game_id_tag_id_pk": {
+          "name": "GAMETOTAGS_game_id_tag_id_pk",
+          "columns": [
+            "game_id",
+            "tag_id"
+          ]
+        }
+      },
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.PLAYERS": {
+      "name": "PLAYERS",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "identity": {
+            "type": "always",
+            "name": "PLAYERS_id_seq",
+            "schema": "public",
+            "increment": "1",
+            "startWith": "1",
+            "minValue": "1",
+            "maxValue": "2147483647",
+            "cache": "1",
+            "cycle": false
+          }
+        },
+        "username": {
+          "name": "username",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "PLAYERS_username_unique": {
+          "name": "PLAYERS_username_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "username"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.PLAYERTOGAMES": {
+      "name": "PLAYERTOGAMES",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "identity": {
+            "type": "always",
+            "name": "PLAYERTOGAMES_id_seq",
+            "schema": "public",
+            "increment": "1",
+            "startWith": "1",
+            "minValue": "1",
+            "maxValue": "2147483647",
+            "cache": "1",
+            "cycle": false
+          }
+        },
+        "game_id": {
+          "name": "game_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "player_id": {
+          "name": "player_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "playtime": {
+          "name": "playtime",
+          "type": "interval",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'0 seconds'"
+        },
+        "recommended": {
+          "name": "recommended",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "review": {
+          "name": "review",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "PLAYERTOGAMES_game_id_GAMES_id_fk": {
+          "name": "PLAYERTOGAMES_game_id_GAMES_id_fk",
+          "tableFrom": "PLAYERTOGAMES",
+          "tableTo": "GAMES",
+          "columnsFrom": [
+            "game_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
+        },
+        "PLAYERTOGAMES_player_id_PLAYERS_id_fk": {
+          "name": "PLAYERTOGAMES_player_id_PLAYERS_id_fk",
+          "tableFrom": "PLAYERTOGAMES",
+          "tableTo": "PLAYERS",
+          "columnsFrom": [
+            "player_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {
+        "review": {
+          "name": "review",
+          "value": "(\"PLAYERTOGAMES\".\"review\" IS NULL AND \"PLAYERTOGAMES\".\"recommended\" IS NULL) OR (\"PLAYERTOGAMES\".\"review\" IS NOT NULL AND \"PLAYERTOGAMES\".\"recommended\" IS NOT NULL)"
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "public.SAVEDPLAYS": {
+      "name": "SAVEDPLAYS",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "identity": {
+            "type": "always",
+            "name": "SAVEDPLAYS_id_seq",
+            "schema": "public",
+            "increment": "1",
+            "startWith": "1",
+            "minValue": "1",
+            "maxValue": "2147483647",
+            "cache": "1",
+            "cycle": false
+          }
+        },
+        "game_to_player_id": {
+          "name": "game_to_player_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "file": {
+          "name": "file",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "link": {
+          "name": "link",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "SAVEDPLAYS_game_to_player_id_PLAYERTOGAMES_id_fk": {
+          "name": "SAVEDPLAYS_game_to_player_id_PLAYERTOGAMES_id_fk",
+          "tableFrom": "SAVEDPLAYS",
+          "tableTo": "PLAYERTOGAMES",
+          "columnsFrom": [
+            "game_to_player_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.TAGS": {
+      "name": "TAGS",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "identity": {
+            "type": "always",
+            "name": "TAGS_id_seq",
+            "schema": "public",
+            "increment": "1",
+            "startWith": "1",
+            "minValue": "1",
+            "maxValue": "2147483647",
+            "cache": "1",
+            "cycle": false
+          }
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "TAGS_name_unique": {
+          "name": "TAGS_name_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "name"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    }
+  },
+  "enums": {},
+  "schemas": {},
+  "sequences": {},
+  "roles": {},
+  "policies": {},
+  "views": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}
