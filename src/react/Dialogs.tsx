@@ -19,6 +19,8 @@ import ShowGame from "./tables/ShowGame";
 import FormGameTag from "./forms/FormGameTag";
 import ShowGameTag from "./tables/ShowGameTag";
 import ShowPlayer from "./tables/ShowPlayer";
+import ShowPlayerGame from "./tables/ShowPlayerGame";
+import FormPlayerGame from "./forms/FormPlayerGame";
 
 export default function Dialogs() {
   return (
@@ -134,7 +136,14 @@ export default function Dialogs() {
             <CardTitle>Player-Game</CardTitle>
           </CardHeader>
           <CardContent>
-            <FormTag />
+            <GenericInfo
+              createForm={<FormPlayerGame />}
+              readForm={
+                <Suspense fallback={<h1>Loading</h1>}>
+                  <ShowPlayerGame />
+                </Suspense>
+              }
+            />
           </CardContent>
         </Card>
       </TabsContent>
