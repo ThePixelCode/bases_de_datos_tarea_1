@@ -21,6 +21,7 @@ import ShowGameTag from "./tables/ShowGameTag";
 import ShowPlayer from "./tables/ShowPlayer";
 import ShowPlayerGame from "./tables/ShowPlayerGame";
 import FormPlayerGame from "./forms/FormPlayerGame";
+import FormSavePlay from "./forms/FormSavePlay";
 
 export default function Dialogs() {
   return (
@@ -42,6 +43,7 @@ export default function Dialogs() {
           </CardHeader>
           <CardContent>
             <GenericInfo
+              tableName="developer"
               createForm={<FormDeveloper />}
               readForm={
                 <Suspense fallback={<h1>Loading</h1>}>
@@ -59,6 +61,7 @@ export default function Dialogs() {
           </CardHeader>
           <CardContent>
             <GenericInfo
+              tableName="22"
               createForm={<FormDeveloper />}
               readForm={
                 <Suspense fallback={<h1>Loading</h1>}>
@@ -75,7 +78,11 @@ export default function Dialogs() {
             <CardTitle>Game</CardTitle>
           </CardHeader>
           <CardContent>
-            <GenericInfo createForm={<FormGame />} readForm={<ShowGame />} />
+            <GenericInfo
+              tableName="game"
+              createForm={<FormGame />}
+              readForm={<ShowGame />}
+            />
           </CardContent>
         </Card>
       </TabsContent>
@@ -86,6 +93,7 @@ export default function Dialogs() {
           </CardHeader>
           <CardContent>
             <GenericInfo
+              tableName="player"
               createForm={<FormPlayer />}
               readForm={
                 <Suspense fallback={<h1>Loading</h1>}>
@@ -103,6 +111,7 @@ export default function Dialogs() {
           </CardHeader>
           <CardContent>
             <GenericInfo
+              tableName="tag"
               createForm={<FormTag />}
               readForm={
                 <Suspense fallback={<h1>Loading</h1>}>
@@ -120,6 +129,7 @@ export default function Dialogs() {
           </CardHeader>
           <CardContent>
             <GenericInfo
+              tableName="game_tag"
               createForm={<FormGameTag />}
               readForm={
                 <Suspense fallback={<h1>Loading</h1>}>
@@ -137,6 +147,7 @@ export default function Dialogs() {
           </CardHeader>
           <CardContent>
             <GenericInfo
+              tableName="player_game"
               createForm={<FormPlayerGame />}
               readForm={
                 <Suspense fallback={<h1>Loading</h1>}>
@@ -153,7 +164,7 @@ export default function Dialogs() {
             <CardTitle>Saved Play</CardTitle>
           </CardHeader>
           <CardContent>
-            <FormTag />
+            <FormSavePlay />
           </CardContent>
         </Card>
       </TabsContent>
