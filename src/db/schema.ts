@@ -152,7 +152,7 @@ export const savedPlayTable = pgTable("SAVEDPLAYS", {
       onUpdate: "cascade",
     }),
   file: varchar({ length: 255 }).notNull(),
-  link: varchar({ length: 255 }).notNull(),
+  link: varchar({ length: 255 }).unique().notNull(),
 });
 
 export const savedPlayRelations = relations(savedPlayTable, ({ one }) => ({
