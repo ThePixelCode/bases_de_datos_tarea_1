@@ -12,7 +12,7 @@ import {
 import GenericRemove from "../GenericRemove";
 import EditPlayerGame from "../Edit/EditPlayerGame";
 import { ThumbsUp, ThumbsDown } from "lucide-react";
-import { useQueries, useQuery } from "@tanstack/react-query";
+import { useQueries } from "@tanstack/react-query";
 import { Duration } from "luxon";
 
 export default function ShowGameTag() {

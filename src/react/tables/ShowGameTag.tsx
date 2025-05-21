@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/table";
 import GenericRemove from "../GenericRemove";
 import EditGameTag from "../Edit/EditGameTag";
-import { useQueries, useQuery } from "@tanstack/react-query";
+import { useQueries } from "@tanstack/react-query";
 
 export default function ShowGameTag() {
   const [
