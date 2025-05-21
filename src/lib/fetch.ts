@@ -1,0 +1,164 @@
+import { Developer, Game, GameTag, Player, Tag } from "./check";
+
+export function fetchDeveloper(id: number): () => Promise<Developer> {
+  return async () => {
+    const response = await fetch(`/api/developer/${id}`);
+    if (!response.ok) {
+      throw new Error(`Error status ${response.status}`);
+    }
+
+    const json = Developer.validate(await response.json());
+
+    if (json.is_err()) {
+      throw new Error("TODO");
+    }
+
+    return json.unwrap().getFirst();
+  };
+}
+
+export function fetchGame(id: number): () => Promise<Game> {
+  return async () => {
+    const response = await fetch(`/api/game/${id}`);
+    if (!response.ok) {
+      throw new Error(`Error status ${response.status}`);
+    }
+
+    const json = Game.validate(await response.json());
+
+    if (json.is_err()) {
+      throw new Error("TODO");
+    }
+
+    return json.unwrap().getFirst();
+  };
+}
+
+export function fetchTag(id: number): () => Promise<Tag> {
+  return async () => {
+    const response = await fetch(`/api/tag/${id}`);
+    if (!response.ok) {
+      throw new Error(`Error status ${response.status}`);
+    }
+
+    const json = Tag.validate(await response.json());
+
+    if (json.is_err()) {
+      throw new Error("TODO");
+    }
+
+    return json.unwrap().getFirst();
+  };
+}
+
+export function fetchPlayer(id: number): () => Promise<Player> {
+  return async () => {
+    const response = await fetch(`/api/player/${id}`);
+    if (!response.ok) {
+      throw new Error(`Error status ${response.status}`);
+    }
+
+    const json = Player.validate(await response.json());
+
+    if (json.is_err()) {
+      throw new Error("TODO");
+    }
+
+    return json.unwrap().getFirst();
+  };
+}
+
+export function fetchGameTag(
+  gameId: number,
+  tagId: number,
+): () => Promise<GameTag> {
+  return async () => {
+    const response = await fetch(`/api/game_tag/${gameId}/${tagId}`);
+    if (!response.ok) {
+      throw new Error(`Error status ${response.status}`);
+    }
+
+    const json = GameTag.validate(await response.json());
+
+    if (json.is_err()) {
+      throw new Error("TODO");
+    }
+
+    return json.unwrap().getFirst();
+  };
+}
+
+export async function fetchDevelopers(): Promise<Developer[]> {
+  const response = await fetch("/api/developer");
+  if (!response.ok) {
+    throw new Error(`Error status ${response.status}`);
+  }
+
+  const json = Developer.validate(await response.json());
+
+  if (json.is_err()) {
+    throw new Error("TODO");
+  }
+
+  return json.unwrap().toArray();
+}
+
+export async function fetchGames(): Promise<Game[]> {
+  const response = await fetch("/api/game");
+  if (!response.ok) {
+    throw new Error(`Error status ${response.status}`);
+  }
+
+  const json = Game.validate(await response.json());
+
+  if (json.is_err()) {
+    throw new Error("TODO");
+  }
+
+  return json.unwrap().toArray();
+}
+
+export async function fetchTags(): Promise<Tag[]> {
+  const response = await fetch("/api/tag");
+  if (!response.ok) {
+    throw new Error(`Error status ${response.status}`);
+  }
+
+  const json = Tag.validate(await response.json());
+
+  if (json.is_err()) {
+    throw new Error("TODO");
+  }
+
+  return json.unwrap().toArray();
+}
+
+export async function fetchPlayers(): Promise<Player[]> {
+  const response = await fetch("/api/player");
+  if (!response.ok) {
+    throw new Error(`Error status ${response.status}`);
+  }
+
+  const json = Player.validate(await response.json());
+
+  if (json.is_err()) {
+    throw new Error("TODO");
+  }
+
+  return json.unwrap().toArray();
+}
+
+export async function fetchGameTags(): Promise<GameTag[]> {
+  const response = await fetch("/api/game_tag");
+  if (!response.ok) {
+    throw new Error(`Error status ${response.status}`);
+  }
+
+  const json = GameTag.validate(await response.json());
+
+  if (json.is_err()) {
+    throw new Error("TODO");
+  }
+
+  return json.unwrap().toArray();
+}
