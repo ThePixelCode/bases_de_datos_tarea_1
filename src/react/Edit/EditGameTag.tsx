@@ -109,7 +109,7 @@ export default function EditTag({
     return <h1>TODO!!!</h1>;
   }
 
-  if (isTagLoading || isGameError || isGameTagLoading) {
+  if (isTagLoading || isGameLoading || isGameTagLoading) {
     return <h1>TODO!!!</h1>;
   }
 
