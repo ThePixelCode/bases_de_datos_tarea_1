@@ -385,3 +385,106 @@ export class Player {
     return Player.getOne(value).map((ok) => MaybeArr.fromOne(ok));
   }
 }
+
+export class PlayerGameUpdate {
+  constructor(
+    public gameId: number,
+    public playerId: number,
+    public playtime: string,
+    public recommended: boolean | null,
+    public review: string | null,
+  ) {}
+
+  public static isPlayerGameUpdate(value: any): value is PlayerGameUpdate {
+    if (typeof value !== "object") {
+      return false;
+    }
+    return (
+      Object.keys(value).find((a) => a == "gameId") === "gameId" &&
+      typeof value.gameId === "number" &&
+      Object.keys(value).find((a) => a == "playerId") === "playerId" &&
+      typeof value.playerId === "number" &&
+      Object.keys(value).find((a) => a == "playtime") === "playtime" &&
+      typeof value.playtime === "string" &&
+      Object.keys(value).find((a) => a == "recommended") === "recommended" &&
+      (typeof value.recommended === "boolean" ||
+        (typeof value.recommended === "object" &&
+          value.recommended === null)) &&
+      Object.keys(value).find((a) => a == "review") === "review" &&
+      (typeof value.review === "string" ||
+        (typeof value.review === "object" && value.review === null))
+    );
+  }
+
+  private static getOne(value: any): Result<PlayerGameUpdate, Errors> {
+    if (value === null || value === undefined) {
+      return Result.err(Errors.undefined);
+    }
+    if (PlayerGameUpdate.isPlayerGameUpdate(value)) {
+      return Result.ok(value);
+    }
+    return Result.err(Errors.invalid);
+  }
+
+  static validate(value: any): Result<MaybeArr<PlayerGameUpdate>, Errors> {
+    if (Array.isArray(value)) {
+      return Result.collect(
+        value.map((val) => PlayerGameUpdate.getOne(val)),
+      ).map((ok) => MaybeArr.fromArray(ok));
+    }
+    return PlayerGameUpdate.getOne(value).map((ok) => MaybeArr.fromOne(ok));
+  }
+}
+
+export class PlayerGame {
+  constructor(
+    public id: number,
+    public gameId: number,
+    public playerId: number,
+    public playtime: string,
+    public recommended: boolean | null,
+    public review: string | null,
+  ) {}
+
+  public static isPlayerGame(value: any): value is PlayerGame {
+    if (typeof value !== "object") {
+      return false;
+    }
+    return (
+      Object.keys(value).find((a) => a == "id") === "id" &&
+      typeof value.id === "number" &&
+      Object.keys(value).find((a) => a == "gameId") === "gameId" &&
+      typeof value.gameId === "number" &&
+      Object.keys(value).find((a) => a == "playerId") === "playerId" &&
+      typeof value.playerId === "number" &&
+      Object.keys(value).find((a) => a == "playtime") === "playtime" &&
+      typeof value.playtime === "string" &&
+      Object.keys(value).find((a) => a == "recommended") === "recommended" &&
+      (typeof value.recommended === "boolean" ||
+        (typeof value.recommended === "object" &&
+          value.recommended === null)) &&
+      Object.keys(value).find((a) => a == "review") === "review" &&
+      (typeof value.review === "string" ||
+        (typeof value.review === "object" && value.review === null))
+    );
+  }
+
+  private static getOne(value: any): Result<PlayerGame, Errors> {
+    if (value === null || value === undefined) {
+      return Result.err(Errors.undefined);
+    }
+    if (PlayerGame.isPlayerGame(value)) {
+      return Result.ok(value);
+    }
+    return Result.err(Errors.invalid);
+  }
+
+  static validate(value: any): Result<MaybeArr<PlayerGame>, Errors> {
+    if (Array.isArray(value)) {
+      return Result.collect(value.map((val) => PlayerGame.getOne(val))).map(
+        (ok) => MaybeArr.fromArray(ok),
+      );
+    }
+    return PlayerGame.getOne(value).map((ok) => MaybeArr.fromOne(ok));
+  }
+}
