@@ -1,5 +1,5 @@
-import { tagTable, playerToGameTable } from "@/db/schema";
-import { TagUpdate } from "@/lib/check";
+import { playerToGameTable } from "@/db/schema";
+import { PlayerGameUpdate } from "@/lib/check";
 import { db } from "@/lib/database";
 import { json } from "@/lib/responses";
 import type { APIRoute } from "astro";
@@ -20,13 +20,16 @@ export const GET: APIRoute = async ({ request }) => {
 };
 
 export const POST: APIRoute = async ({ request }) => {
-  const newTagRes = TagUpdate.validate(await request.json());
+  const newTagRes = PlayerGameUpdate.validate(await request.json());
   if (newTagRes.is_err()) {
     return json({ error: `invalid: ${newTagRes.unwrap_err()}` }, 400);
   }
   const newTag = newTagRes.unwrap().getFirst();
 
-  const tag = await db.insert(tagTable).values(newTag).returning(selectData);
+  const tag = await db
+    .insert(playerToGameTable)
+    .values(newTag)
+    .returning(selectData);
 
   return json(tag[0], 201);
 };
