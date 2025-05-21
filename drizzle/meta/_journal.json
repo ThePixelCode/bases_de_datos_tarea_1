@@ -15,6 +15,13 @@
       "when": 1745225093398,
       "tag": "0001_far_abomination",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1747808802421,
+      "tag": "0002_custom_date_function",
+      "breakpoints": true
     }
   ]
 }
