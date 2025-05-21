@@ -1,4 +1,4 @@
-import { Developer, Game, GameTag, Player, Tag } from "./check";
+import { Developer, Game, GameTag, Player, PlayerGame, Tag } from "./check";
 
 export function fetchDeveloper(id: number): () => Promise<Developer> {
   return async () => {
@@ -88,6 +88,23 @@ export function fetchGameTag(
   };
 }
 
+export function fetchPlayerGame(id: number): () => Promise<PlayerGame> {
+  return async () => {
+    const response = await fetch(`/api/player_game/${id}`);
+    if (!response.ok) {
+      throw new Error(`Error status ${response.status}`);
+    }
+
+    const json = PlayerGame.validate(await response.json());
+
+    if (json.is_err()) {
+      throw new Error("TODO");
+    }
+
+    return json.unwrap().getFirst();
+  };
+}
+
 export async function fetchDevelopers(): Promise<Developer[]> {
   const response = await fetch("/api/developer");
   if (!response.ok) {
@@ -155,6 +172,21 @@ export async function fetchGameTags(): Promise<GameTag[]> {
   }
 
   const json = GameTag.validate(await response.json());
+
+  if (json.is_err()) {
+    throw new Error("TODO");
+  }
+
+  return json.unwrap().toArray();
+}
+
+export async function fetchPlayerGames(): Promise<PlayerGame[]> {
+  const response = await fetch("/api/player_game");
+  if (!response.ok) {
+    throw new Error(`Error status ${response.status}`);
+  }
+
+  const json = PlayerGame.validate(await response.json());
 
   if (json.is_err()) {
     throw new Error("TODO");
