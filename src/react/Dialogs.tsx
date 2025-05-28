@@ -2,14 +2,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import FormDeveloper from "./forms/FormDeveloper";
 import FormPlayer from "./forms/FormPlayer";
 import FormTag from "./forms/FormTag";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import GenericInfo from "./GenericInfo";
 import ShowTag from "./tables/ShowTag";
 import { Suspense } from "react";
@@ -22,6 +15,7 @@ import ShowPlayer from "./tables/ShowPlayer";
 import ShowPlayerGame from "./tables/ShowPlayerGame";
 import FormPlayerGame from "./forms/FormPlayerGame";
 import FormSavePlay from "./forms/FormSavePlay";
+import ShowSavePlay from "./tables/ShowSavePlay";
 
 export default function Dialogs() {
   return (
@@ -164,7 +158,15 @@ export default function Dialogs() {
             <CardTitle>Saved Play</CardTitle>
           </CardHeader>
           <CardContent>
-            <FormSavePlay />
+            <GenericInfo
+              tableName="player_game"
+              createForm={<FormSavePlay />}
+              readForm={
+                <Suspense fallback={<h1>Loading</h1>}>
+                  <ShowSavePlay />
+                </Suspense>
+              }
+            />
           </CardContent>
         </Card>
       </TabsContent>
