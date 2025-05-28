@@ -151,8 +151,8 @@ export const savedPlayTable = pgTable("SAVEDPLAYS", {
       onDelete: "cascade",
       onUpdate: "cascade",
     }),
-  file: varchar({ length: 255 }).notNull(),
-  link: varchar({ length: 255 }).unique().notNull(),
+  server_file: varchar({ length: 255 }).notNull(),
+  local_file: varchar({ length: 255 }).notNull(),
 });
 
 export const savedPlayRelations = relations(savedPlayTable, ({ one }) => ({

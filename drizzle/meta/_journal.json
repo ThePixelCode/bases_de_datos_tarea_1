@@ -29,6 +29,13 @@
       "when": 1747840345980,
       "tag": "0003_talented_spitfire",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1747940948847,
+      "tag": "0004_fast_yellowjacket",
+      "breakpoints": true
     }
   ]
 }
