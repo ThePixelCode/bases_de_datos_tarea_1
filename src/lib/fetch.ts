@@ -1,4 +1,14 @@
-import { Developer, Game, GameTag, Player, PlayerGame, Tag } from "./check";
+import {
+  Developer,
+  Game,
+  GameTag,
+  Player,
+  PlayerGame,
+  SavedPlay,
+  Tag,
+} from "./check";
+
+export const STALE_TIME: number = 5 * 60 * 1000;
 
 export function fetchDeveloper(id: number): () => Promise<Developer> {
   return async () => {
@@ -105,6 +115,23 @@ export function fetchPlayerGame(id: number): () => Promise<PlayerGame> {
   };
 }
 
+export function fetchSavedPlay(id: number): () => Promise<SavedPlay> {
+  return async () => {
+    const response = await fetch(`/api/saved_play/${id}`);
+    if (!response.ok) {
+      throw new Error(`Error status ${response.status}`);
+    }
+
+    const json = SavedPlay.validate(await response.json());
+
+    if (json.is_err()) {
+      throw new Error("TODO");
+    }
+
+    return json.unwrap().getFirst();
+  };
+}
+
 export async function fetchDevelopers(): Promise<Developer[]> {
   const response = await fetch("/api/developer");
   if (!response.ok) {
@@ -187,6 +214,21 @@ export async function fetchPlayerGames(): Promise<PlayerGame[]> {
   }
 
   const json = PlayerGame.validate(await response.json());
+
+  if (json.is_err()) {
+    throw new Error("TODO");
+  }
+
+  return json.unwrap().toArray();
+}
+
+export async function fetchSavedPlays(): Promise<SavedPlay[]> {
+  const response = await fetch("/api/saved_play");
+  if (!response.ok) {
+    throw new Error(`Error status ${response.status}`);
+  }
+
+  const json = SavedPlay.validate(await response.json());
 
   if (json.is_err()) {
     throw new Error("TODO");
