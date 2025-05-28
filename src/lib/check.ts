@@ -488,3 +488,153 @@ export class PlayerGame {
     return PlayerGame.getOne(value).map((ok) => MaybeArr.fromOne(ok));
   }
 }
+
+export class SavedPlayCreate {
+  constructor(
+    public files: {
+      file: File;
+      local_file: string;
+      gamePlayerId: number;
+    }[],
+  ) {}
+
+  private static isFiles(obj: any): obj is File[] {
+    return Array.isArray(obj) && obj.every((o) => o instanceof File);
+  }
+
+  private static isLocation(obj: any): obj is string {
+    return typeof obj === "string";
+  }
+
+  private static isGamePlayerId(obj: any): obj is string {
+    return typeof obj === "string" && !isNaN(Number(obj));
+  }
+
+  public static fromFormData(
+    formData: FormData,
+    path_join: (...paths: string[]) => string,
+  ): Result<SavedPlayCreate, Errors> {
+    const files = formData.getAll("files");
+    const location = formData.get("location");
+    const gamePlayerIdString = formData.get("gamePlayerId");
+
+    if (!SavedPlayCreate.isGamePlayerId(gamePlayerIdString)) {
+      return Result.err(Errors.invalid);
+    }
+    const gamePlayerId = Number(gamePlayerIdString);
+    if (!SavedPlayCreate.isLocation(location)) {
+      return Result.err(Errors.invalid);
+    }
+    if (!SavedPlayCreate.isFiles(files)) {
+      return Result.err(Errors.invalid);
+    }
+
+    let file_list: { file: File; local_file: string; gamePlayerId: number }[] =
+      [];
+
+    for (let i = 0; i < files.length; i++) {
+      file_list[i] = {
+        file: files[i],
+        local_file: path_join(location, files[i].name),
+        gamePlayerId,
+      };
+    }
+
+    return Result.ok(new SavedPlayCreate(file_list));
+  }
+}
+
+export class SavedPlayUpdate {
+  constructor(
+    public file: {
+      file: File;
+      local_file: string;
+      gamePlayerId: number;
+    },
+  ) {}
+
+  private static isFile(obj: any): obj is File {
+    return obj instanceof File;
+  }
+
+  private static isLocation(obj: any): obj is string {
+    return typeof obj === "string";
+  }
+
+  private static isGamePlayerId(obj: any): obj is string {
+    return typeof obj === "string" && !isNaN(Number(obj));
+  }
+
+  public static fromFormData(
+    formData: FormData,
+    path_join: (...paths: string[]) => string,
+  ): Result<SavedPlayUpdate, Errors> {
+    const file = formData.get("file");
+    const location = formData.get("location");
+    const gamePlayerIdString = formData.get("gameToPlayerId");
+
+    if (!SavedPlayUpdate.isGamePlayerId(gamePlayerIdString)) {
+      return Result.err(Errors.invalid);
+    }
+    const gamePlayerId = Number(gamePlayerIdString);
+    if (!SavedPlayUpdate.isLocation(location)) {
+      return Result.err(Errors.invalid);
+    }
+    if (!SavedPlayUpdate.isFile(file)) {
+      return Result.err(Errors.invalid);
+    }
+
+    let file_update: {
+      file: File;
+      local_file: string;
+      gamePlayerId: number;
+    } = {
+      file,
+      local_file: path_join(location, file.name),
+      gamePlayerId,
+    };
+
+    return Result.ok(new SavedPlayUpdate(file_update));
+  }
+}
+
+export class SavedPlay {
+  constructor(
+    public id: number,
+    public gameToPlayerId: number,
+    public local_file: string,
+  ) {}
+  private static isId(value: any): value is number {
+    return typeof value === "number" && !isNaN(value);
+  }
+  private static isString(value: any): value is string {
+    return typeof value === "string" && value !== "";
+  }
+  private static isSavedPlay(value: any): value is SavedPlay {
+    if (
+      SavedPlay.isId(value.id) &&
+      SavedPlay.isId(value.gameToPlayerId) &&
+      SavedPlay.isString(value.local_file)
+    ) {
+      return true;
+    }
+    return false;
+  }
+  private static getOne(value: any): Result<SavedPlay, Errors> {
+    if (value === null || value === undefined) {
+      return Result.err(Errors.invalid);
+    }
+    if (SavedPlay.isSavedPlay(value)) {
+      return Result.ok(value);
+    }
+    return Result.err(Errors.invalid);
+  }
+  public static validate(value: any): Result<MaybeArr<SavedPlay>, Errors> {
+    if (Array.isArray(value)) {
+      return Result.collect(value.map((v) => SavedPlay.getOne(v))).map((v) =>
+        MaybeArr.fromArray(v),
+      );
+    }
+    return SavedPlay.getOne(value).map((v) => MaybeArr.fromOne(v));
+  }
+}
