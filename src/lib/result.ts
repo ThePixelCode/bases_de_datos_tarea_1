@@ -62,9 +62,13 @@ export class Result<T, E> {
     return this.err as E;
   }
 
-  public static try<T>(callback: () => T): Result<T, Error> {
+  public static try<T>(callback: () => T | Result<T, Error>): Result<T, Error> {
     try {
-      return Result.ok(callback());
+      const res = callback();
+      if (res instanceof Result) {
+        return res;
+      }
+      return Result.ok(res);
     } catch (err) {
       if (err instanceof Error) {
         return Result.err(err);
@@ -74,11 +78,15 @@ export class Result<T, E> {
   }
 
   public static tryArgs<T, F>(
-    callback: (args: F) => T,
+    callback: (args: F) => T | Result<T, Error>,
     args: F,
   ): Result<T, Error> {
     try {
-      return Result.ok(callback(args));
+      const res = callback(args);
+      if (res instanceof Result) {
+        return res;
+      }
+      return Result.ok(res);
     } catch (err) {
       if (err instanceof Error) {
         return Result.err(err);
@@ -88,10 +96,14 @@ export class Result<T, E> {
   }
 
   public static async tryAsync<T>(
-    callback: () => Promise<T>,
+    callback: () => Promise<T | Result<T, Error>>,
   ): Promise<Result<T, Error>> {
     try {
-      return Result.ok(await callback());
+      const res = await callback();
+      if (res instanceof Result) {
+        return res;
+      }
+      return Result.ok(res);
     } catch (err) {
       if (err instanceof Error) {
         return Result.err(err);
@@ -101,11 +113,15 @@ export class Result<T, E> {
   }
 
   public static async tryAsyncArgs<T, F>(
-    callback: (args: F) => Promise<T>,
+    callback: (args: F) => Promise<T | Result<T, Error>>,
     args: F,
   ): Promise<Result<T, Error>> {
     try {
-      return Result.ok(await callback(args));
+      const res = await callback(args);
+      if (res instanceof Result) {
+        return res;
+      }
+      return Result.ok(res);
     } catch (err) {
       if (err instanceof Error) {
         return Result.err(err);
