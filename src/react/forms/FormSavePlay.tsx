@@ -156,7 +156,7 @@ export default function FormSavePlay() {
       .then((res) => {
         if (Array.isArray(res)) {
           toast.success(
-            `Succesfully writed ${res.length} ${res.length === 1 ? "entry" : "entries"}`,
+            `Successfully wrote ${res.length} ${res.length === 1 ? "entry" : "entries"}`,
           );
           query.invalidateQueries({ queryKey: ["saved_plays"] });
         } else {

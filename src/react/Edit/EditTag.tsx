@@ -70,7 +70,7 @@ export default function EditTag({
       method: "PATCH",
       body: JSON.stringify(value),
     }).then(() => {
-      toast.success("Edit Succesfully");
+      toast.success("Edit Successfully");
       query.invalidateQueries({ queryKey: ["tags"] });
       query.invalidateQueries({ queryKey: ["tag", id] });
       if (callback !== undefined) {

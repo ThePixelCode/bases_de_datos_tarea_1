@@ -166,7 +166,7 @@ export default function EditSavePlay({ id }: { id: number }) {
           console.log("" + res);
           toast.error("Error uploading, " + res);
         } else {
-          toast.success("Succesfully writed 1 entry");
+          toast.success("Successfully wrote 1 entry");
           query.invalidateQueries({ queryKey: ["saved_plays"] });
         }
       })
