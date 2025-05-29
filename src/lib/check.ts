@@ -638,3 +638,173 @@ export class SavedPlay {
     return SavedPlay.getOne(value).map((v) => MaybeArr.fromOne(v));
   }
 }
+
+export class Friendship {
+  private constructor(
+    public id: number,
+    public user1: number,
+    public user2: number,
+    public are_friends: boolean,
+    public messages: { user: number; message: string }[],
+  ) {}
+
+  private static isNumber(value: any): value is number {
+    return value !== undefined && value !== null && typeof value === "number";
+  }
+
+  private static isBoolean(value: any): value is boolean {
+    return value !== undefined && value !== null && typeof value === "boolean";
+  }
+
+  private static isString(value: any): value is string {
+    return value !== undefined && value !== null && typeof value === "string";
+  }
+
+  private static isMessage(
+    value: any,
+  ): value is { user: number; message: string } {
+    return (
+      value !== undefined &&
+      value !== null &&
+      typeof value === "object" &&
+      Object.keys(value).find((k) => k === "user") === "user" &&
+      Friendship.isNumber(value.user) &&
+      Object.keys(value).find((k) => k === "message") === "message" &&
+      Friendship.isString(value.message)
+    );
+  }
+
+  private static isFriendship(value: any): value is Friendship {
+    return (
+      value !== undefined &&
+      value !== null &&
+      typeof value === "object" &&
+      Object.keys(value).find((k) => k === "id") === "id" &&
+      Friendship.isNumber(value.id) &&
+      Object.keys(value).find((k) => k === "user1") === "user1" &&
+      Friendship.isNumber(value.user1) &&
+      Object.keys(value).find((k) => k === "user2") === "user2" &&
+      Friendship.isNumber(value.user2) &&
+      Object.keys(value).find((k) => k === "are_friends") === "are_friends" &&
+      Friendship.isBoolean(value.are_friends) &&
+      Object.keys(value).find((k) => k === "messages") === "messages" &&
+      Array.isArray(value.messages) &&
+      (value.messages as any[]).every((m) => Friendship.isMessage(m))
+    );
+  }
+
+  private static getOne(value: any): Result<Friendship, Error> {
+    return Result.tryArgs(
+      ({ value }) => {
+        if (Friendship.isFriendship(value)) {
+          return value;
+        }
+        throw new Error("Invalid value");
+      },
+      { value },
+    );
+  }
+
+  public static validate(value: any): Result<MaybeArr<Friendship>, Error> {
+    return Result.tryArgs(
+      ({ value }) => {
+        if (Array.isArray(value)) {
+          return Result.collect(
+            (value as any[]).map((v) => Friendship.getOne(v)),
+          ).map((c) => MaybeArr.fromArray(c));
+        }
+        return Friendship.getOne(value).map((f) => MaybeArr.fromOne(f));
+      },
+      { value },
+    );
+  }
+}
+
+export class FriendshipUpdate {
+  private constructor(
+    public user1: number,
+    public user2: number,
+    public are_friends: boolean,
+    public messages: { user: number; message: string }[],
+  ) {}
+
+  private static isNumber(value: any): value is number {
+    return value !== undefined && value !== null && typeof value === "number";
+  }
+
+  private static isBoolean(value: any): value is boolean {
+    return value !== undefined && value !== null && typeof value === "boolean";
+  }
+
+  private static isString(value: any): value is string {
+    return value !== undefined && value !== null && typeof value === "string";
+  }
+
+  private static isMessage(
+    value: any,
+  ): value is { user: number; message: string } {
+    return (
+      value !== undefined &&
+      value !== null &&
+      typeof value === "object" &&
+      Object.keys(value).find((k) => k === "user") === "user" &&
+      FriendshipUpdate.isNumber(value.user) &&
+      Object.keys(value).find((k) => k === "message") === "message" &&
+      FriendshipUpdate.isString(value.message)
+    );
+  }
+
+  private static isFriendship(value: any): value is FriendshipUpdate {
+    return (
+      value !== undefined &&
+      value !== null &&
+      typeof value === "object" &&
+      Object.keys(value).find((k) => k === "user1") === "user1" &&
+      FriendshipUpdate.isNumber(value.user1) &&
+      Object.keys(value).find((k) => k === "user2") === "user2" &&
+      FriendshipUpdate.isNumber(value.user2) &&
+      Object.keys(value).find((k) => k === "are_friends") === "are_friends" &&
+      FriendshipUpdate.isBoolean(value.are_friends) &&
+      Object.keys(value).find((k) => k === "messages") === "messages" &&
+      Array.isArray(value.messages) &&
+      (value.messages as any[]).every((m) => FriendshipUpdate.isMessage(m))
+    );
+  }
+
+  private static getOne(value: any): Result<FriendshipUpdate, Error> {
+    return Result.tryArgs(
+      ({ value }) => {
+        if (FriendshipUpdate.isFriendship(value)) {
+          const [min, max] =
+            value.user1 < value.user2
+              ? [value.user1, value.user2]
+              : [value.user2, value.user1];
+          return new FriendshipUpdate(
+            min,
+            max,
+            value.are_friends,
+            value.messages,
+          );
+        }
+        throw new Error("Invalid value");
+      },
+      { value },
+    );
+  }
+
+  public static validate(
+    value: any,
+  ): Result<MaybeArr<FriendshipUpdate>, Error> {
+    return Result.tryArgs(
+      ({ value }) => {
+        if (Array.isArray(value)) {
+          return Result.collect(
+            (value as any[]).map((v) => FriendshipUpdate.getOne(v)),
+          ).map((c) => MaybeArr.fromArray(c));
+        }
+        return FriendshipUpdate.getOne(value).map((f) => MaybeArr.fromOne(f));
+      },
+      { value },
+    );
+  }
+}
