@@ -1,5 +1,6 @@
 import {
   Developer,
+  Friendship,
   Game,
   GameTag,
   Player,
@@ -132,6 +133,23 @@ export function fetchSavedPlay(id: number): () => Promise<SavedPlay> {
   };
 }
 
+export function fetchFriendship(id: number): () => Promise<Friendship> {
+  return async () => {
+    const response = await fetch(`/api/friendship/${id}`);
+    if (!response.ok) {
+      throw new Error(`Error status ${response.status}`);
+    }
+
+    const json = Friendship.validate(await response.json());
+
+    if (json.is_err()) {
+      throw new Error("TODO");
+    }
+
+    return json.unwrap().getFirst();
+  };
+}
+
 export async function fetchDevelopers(): Promise<Developer[]> {
   const response = await fetch("/api/developer");
   if (!response.ok) {
@@ -229,6 +247,21 @@ export async function fetchSavedPlays(): Promise<SavedPlay[]> {
   }
 
   const json = SavedPlay.validate(await response.json());
+
+  if (json.is_err()) {
+    throw new Error("TODO");
+  }
+
+  return json.unwrap().toArray();
+}
+
+export async function fetchFriendships(): Promise<Friendship[]> {
+  const response = await fetch("/api/friendship");
+  if (!response.ok) {
+    throw new Error(`Error status ${response.status}`);
+  }
+
+  const json = Friendship.validate(await response.json());
 
   if (json.is_err()) {
     throw new Error("TODO");
