@@ -11,6 +11,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import type { TableName } from "@/lib/table";
 
 interface Data {
   title: string;
@@ -20,7 +21,7 @@ interface Data {
 interface ComponentProps {
   createForm: React.ReactNode;
   readForm: React.ReactNode;
-  tableName: string;
+  tableName: TableName;
   create?: Data;
 }
 
@@ -59,15 +60,18 @@ export default function GenericInfo({
           </DialogContent>
         </Dialog>
       </div>
-      <div className="col-span-2">
+      <div className="col-span-1">
         <h1>Edit</h1>
       </div>
-      <div className="col-span-1 grid grid-cols-2 gap-2">
+      <div className="col-span-2 grid grid-cols-4 gap-2">
         <Button
           onClick={() => {
             const download = async () => {
-              const res = await fetch(`/api/json/${tableName}`, {
+              const res = await fetch(`/api/table/${tableName}`, {
                 method: "GET",
+                headers: {
+                  Accept: "application/json",
+                },
               });
               const data = await res.json();
 
@@ -95,8 +99,11 @@ export default function GenericInfo({
         <Button
           onClick={() => {
             const download = async () => {
-              const res = await fetch(`/api/csv/${tableName}`, {
+              const res = await fetch(`/api/table/${tableName}`, {
                 method: "GET",
+                headers: {
+                  Accept: "text/csv",
+                },
               });
               const data = await res.text();
 
@@ -120,6 +127,70 @@ export default function GenericInfo({
           }}
         >
           Download CSV
+        </Button>
+        <Button
+          onClick={() => {
+            const download = async () => {
+              const res = await fetch(`/api/table/${tableName}`, {
+                method: "GET",
+                headers: {
+                  Accept: "application/xml",
+                },
+              });
+              const data = await res.text();
+
+              const blob = new Blob([data], {
+                type: "application/xml",
+              });
+              const url = window.URL.createObjectURL(blob);
+
+              const link = document.createElement("a");
+              link.href = url;
+              link.download = (res.headers.get("Content-Disposition") as string)
+                .replace("attachment; filename=", "")
+                .replaceAll('"', "");
+              document.body.appendChild(link);
+              link.click();
+              document.body.removeChild(link);
+              window.URL.revokeObjectURL(url);
+            };
+
+            download();
+          }}
+        >
+          Download XML
+        </Button>
+        <Button
+          onClick={() => {
+            const download = async () => {
+              const res = await fetch(`/api/table/${tableName}`, {
+                method: "GET",
+                headers: {
+                  Accept: "application/yaml",
+                },
+              });
+              const data = await res.text();
+
+              const blob = new Blob([data], {
+                type: "application/yaml",
+              });
+              const url = window.URL.createObjectURL(blob);
+
+              const link = document.createElement("a");
+              link.href = url;
+              link.download = (res.headers.get("Content-Disposition") as string)
+                .replace("attachment; filename=", "")
+                .replaceAll('"', "");
+              document.body.appendChild(link);
+              link.click();
+              document.body.removeChild(link);
+              window.URL.revokeObjectURL(url);
+            };
+
+            download();
+          }}
+        >
+          Download YAML
         </Button>
       </div>
       <div className="col-span-1">

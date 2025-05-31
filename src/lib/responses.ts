@@ -25,14 +25,14 @@ export function file(
   body: BodyInit,
   contentType: string,
   filename: string,
-  responseInit: ResponseInit,
+  responseInit?: ResponseInit,
 ): Response {
   const response_init: ResponseInit = {
-    status: responseInit.status ?? 200,
+    status: responseInit?.status ?? 200,
     headers: {
       "Content-Type": contentType,
       "Content-Disposition": `attachment; filename="${filename}"`,
-      ...responseInit.headers,
+      ...responseInit?.headers,
     },
     ...responseInit,
   };
@@ -43,15 +43,36 @@ export function file(
 export function csv(
   body: BodyInit,
   filename: string,
-  responseInit: ResponseInit,
+  responseInit?: ResponseInit,
 ): Response {
   return file(body, "text/csv", `${filename}.csv`, responseInit);
 }
 
 export function jsonFile(
-  body: BodyInit,
+  body: any,
   filename: string,
-  responseInit: ResponseInit,
+  responseInit?: ResponseInit,
 ): Response {
-  return file(body, "application/json", `${filename}.json`, responseInit);
+  return file(
+    JSON.stringify(body),
+    "application/json",
+    `${filename}.json`,
+    responseInit,
+  );
+}
+
+export function xml(
+  body: string,
+  filename: string,
+  responseInit?: ResponseInit,
+): Response {
+  return file(body, "application/xml", `${filename}.xml`, responseInit);
+}
+
+export function yaml(
+  body: string,
+  filename: string,
+  responseInit?: ResponseInit,
+): Response {
+  return file(body, "application/yaml", `${filename}.yml`, responseInit);
 }
