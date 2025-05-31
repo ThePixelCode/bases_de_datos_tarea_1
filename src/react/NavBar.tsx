@@ -9,19 +9,13 @@ import { Moon, Sun } from "lucide-react";
 import * as React from "react";
 
 export default function NavBar() {
-  const [theme, setThemeState] = React.useState<"light" | "dark">("dark");
+  const [dark, setDarkState] = React.useState(
+    window.matchMedia("(prefers-color-scheme: dark)").matches,
+  );
 
   React.useEffect(() => {
-    const isDarkMode = document.documentElement.classList.contains("dark");
-    setThemeState(isDarkMode ? "dark" : "light");
-  }, []);
-
-  React.useEffect(() => {
-    const isDark =
-      theme === "dark" ||
-      window.matchMedia("(prefers-color-scheme: dark)").matches;
-    document.documentElement.classList[isDark ? "add" : "remove"]("dark");
-  }, [theme]);
+    document.documentElement.classList[dark ? "add" : "remove"]("dark");
+  }, [dark]);
 
   return (
     <NavigationMenu className="w-screen max-w-screen">
@@ -30,13 +24,13 @@ export default function NavBar() {
           <NavigationMenuLink>Data</NavigationMenuLink>
         </NavigationMenuItem>
         <NavigationMenuItem className="flex items-center space-x-2">
-          <Sun />
           <Switch
+            defaultChecked={true}
             onClick={() => {
-              setThemeState(theme === "light" ? "light" : "dark");
+              setDarkState(!dark);
             }}
           />
-          <Moon />
+          {dark ? <Moon /> : <Sun />}
         </NavigationMenuItem>
       </NavigationMenuList>
     </NavigationMenu>
