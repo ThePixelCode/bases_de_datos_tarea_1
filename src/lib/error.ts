@@ -1,5 +1,3 @@
-import { Result } from "./result";
-
 export class SerializableError {
   private constructor(
     public message: string,
@@ -39,21 +37,23 @@ export class SerializableError {
     );
   }
 
-  public static fromResponse(
+  public static async fromResponse(
     response: Response,
-  ): Promise<Result<SerializableError, Error>> {
-    return Result.tryAsyncArgs(
-      async ({ response }) => {
-        const json = await response.json();
+  ): Promise<SerializableError | Error> {
+    try {
+      const json = await response.json();
 
-        if (!SerializableError.isError(json)) {
-          throw new Error("Invalid JSON");
-        }
+      if (!SerializableError.isError(json)) {
+        throw new Error("Invalid JSON");
+      }
 
-        return new SerializableError(json.message, json.name, json.stack);
-      },
-      { response },
-    );
+      return new SerializableError(json.message, json.name, json.stack);
+    } catch (err) {
+      if (err instanceof Error) {
+        return err;
+      }
+      return new Error(`Unknown Error: ${err}`);
+    }
   }
 
   public toJSON(includeStack: boolean): string {

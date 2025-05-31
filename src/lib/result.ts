@@ -1,3 +1,5 @@
+import { SerializableError } from "./error";
+
 const ERR = Symbol("Result.Err");
 const OK = Symbol("Result.Ok");
 export class Result<T, E> {
@@ -62,7 +64,9 @@ export class Result<T, E> {
     return this.err as E;
   }
 
-  public static try<T>(callback: () => T | Result<T, Error>): Result<T, Error> {
+  public static try<T>(
+    callback: () => T | Result<T, Error | SerializableError>,
+  ): Result<T, Error | SerializableError> {
     try {
       const res = callback();
       if (res instanceof Result) {
@@ -73,14 +77,17 @@ export class Result<T, E> {
       if (err instanceof Error) {
         return Result.err(err);
       }
+      if (err instanceof SerializableError) {
+        return Result.err(err);
+      }
       return Result.err(new Error(`Unknown error: ${err}`));
     }
   }
 
   public static tryArgs<T, F>(
-    callback: (args: F) => T | Result<T, Error>,
+    callback: (args: F) => T | Result<T, Error | SerializableError>,
     args: F,
-  ): Result<T, Error> {
+  ): Result<T, Error | SerializableError> {
     try {
       const res = callback(args);
       if (res instanceof Result) {
@@ -91,13 +98,16 @@ export class Result<T, E> {
       if (err instanceof Error) {
         return Result.err(err);
       }
+      if (err instanceof SerializableError) {
+        return Result.err(err);
+      }
       return Result.err(new Error(`Unknown error: ${err}`));
     }
   }
 
   public static async tryAsync<T>(
-    callback: () => Promise<T | Result<T, Error>>,
-  ): Promise<Result<T, Error>> {
+    callback: () => Promise<T | Result<T, Error | SerializableError>>,
+  ): Promise<Result<T, Error | SerializableError>> {
     try {
       const res = await callback();
       if (res instanceof Result) {
@@ -108,14 +118,17 @@ export class Result<T, E> {
       if (err instanceof Error) {
         return Result.err(err);
       }
+      if (err instanceof SerializableError) {
+        return Result.err(err);
+      }
       return Result.err(new Error(`Unknown error: ${err}`));
     }
   }
 
   public static async tryAsyncArgs<T, F>(
-    callback: (args: F) => Promise<T | Result<T, Error>>,
+    callback: (args: F) => Promise<T | Result<T, Error | SerializableError>>,
     args: F,
-  ): Promise<Result<T, Error>> {
+  ): Promise<Result<T, Error | SerializableError>> {
     try {
       const res = await callback(args);
       if (res instanceof Result) {
@@ -124,6 +137,9 @@ export class Result<T, E> {
       return Result.ok(res);
     } catch (err) {
       if (err instanceof Error) {
+        return Result.err(err);
+      }
+      if (err instanceof SerializableError) {
         return Result.err(err);
       }
       return Result.err(new Error(`Unknown error: ${err}`));
