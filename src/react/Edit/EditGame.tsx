@@ -105,7 +105,7 @@ export default function EditGame({
         publisher: Number(value.publisher),
       }),
     }).then((data) => {
-      toast.success("Edit Succesfully");
+      toast.success("Edit Successfully");
       query.invalidateQueries({ queryKey: ["game", id] });
       query.invalidateQueries({ queryKey: ["games"] });
       if (callback !== undefined) {

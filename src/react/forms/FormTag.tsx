@@ -35,7 +35,7 @@ export default function FormTag() {
       method: "POST",
       body: JSON.stringify(values),
     }).then(() => {
-      toast.success("Created Succesfully");
+      toast.success("Created Successfully");
       query.invalidateQueries({ queryKey: ["tags"] });
     });
   }

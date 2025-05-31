@@ -65,7 +65,7 @@ export default function FormGame() {
         publisher: Number(values.publisher),
       }),
     }).then(() => {
-      toast.success("Created Succesfully");
+      toast.success("Created Successfully");
       query.invalidateQueries({ queryKey: ["games"] });
     });
   }

@@ -137,7 +137,7 @@ export default function EditPlayerGame({
         review: value.review,
       }),
     }).then(() => {
-      toast.success("Edit Succesfully");
+      toast.success("Edit Successfully");
       query.invalidateQueries({ queryKey: ["player_games"] });
       query.invalidateQueries({ queryKey: ["player_game", id] });
       if (callback !== undefined) {

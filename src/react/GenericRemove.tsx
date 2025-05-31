@@ -41,7 +41,7 @@ export default function GenericRemove({ url, queryKey, callback }: Props) {
         callback();
       }
 
-      toast.success("Deleted Succesfully");
+      toast.success("Deleted Successfully");
       queryKey.forEach((q) => query.invalidateQueries({ queryKey: q }));
     } catch (err) {
       console.error(err);

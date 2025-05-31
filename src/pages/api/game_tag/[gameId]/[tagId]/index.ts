@@ -7,7 +7,7 @@ import { eq, and } from "drizzle-orm";
 
 export const prerender = false;
 
-export const GET: APIRoute = async ({ params, request }) => {
+export const GET: APIRoute = async ({ params }) => {
   const gameId = Number(params.gameId);
   const tagId = Number(params.tagId);
   if (isNaN(gameId)) {

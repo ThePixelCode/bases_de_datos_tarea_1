@@ -70,7 +70,7 @@ export default function EditDeveloper({
       method: "PATCH",
       body: JSON.stringify(value),
     }).then(() => {
-      toast.success("Edit Succesfully");
+      toast.success("Edit Successfully");
       query.invalidateQueries({ queryKey: ["developer", id] });
       query.invalidateQueries({ queryKey: ["developers"] });
       if (callback !== undefined) {

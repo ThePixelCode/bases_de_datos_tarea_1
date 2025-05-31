@@ -73,7 +73,7 @@ export default function EditPlayer({
       method: "PATCH",
       body: JSON.stringify(value),
     }).then(() => {
-      toast.success("Edit Succesfully");
+      toast.success("Edit Successfully");
       query.invalidateQueries({ queryKey: ["players"] });
       query.invalidateQueries({ queryKey: ["player", id] });
       if (callback !== undefined) {

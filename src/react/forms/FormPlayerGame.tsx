@@ -88,7 +88,7 @@ export default function FormPlayerGame() {
         review: values.review,
       }),
     }).then(() => {
-      toast.success("Created Succesfully");
+      toast.success("Created Successfully");
       query.invalidateQueries({ queryKey: ["player_games"] });
     });
   }

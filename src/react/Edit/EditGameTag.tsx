@@ -95,7 +95,7 @@ export default function EditTag({
         tagId: Number(value.tagId),
       }),
     }).then(() => {
-      toast.success("Edit Succesfully");
+      toast.success("Edit Successfully");
       query.invalidateQueries({ queryKey: ["game_tags"] });
       query.invalidateQueries({ queryKey: ["game_tag", gameId, tagId] });
       if (callback !== undefined) {

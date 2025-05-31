@@ -59,7 +59,7 @@ export default function FormGameTag() {
       method: "POST",
       body: JSON.stringify(values),
     }).then(() => {
-      toast.success("Created Succesfully");
+      toast.success("Created Successfully");
       query.invalidateQueries({ queryKey: ["game_tags"] });
     });
   }
@@ -68,7 +68,7 @@ export default function FormGameTag() {
     return <h1>TODO!!!</h1>;
   }
 
-  if (isTagLoading || isGameError) {
+  if (isTagLoading || isGameLoading) {
     return <h1>TODO!!!</h1>;
   }
 
