@@ -16,6 +16,8 @@ import ShowPlayerGame from "./tables/ShowPlayerGame";
 import FormPlayerGame from "./forms/FormPlayerGame";
 import FormSavePlay from "./forms/FormSavePlay";
 import ShowSavePlay from "./tables/ShowSavePlay";
+import ShowFriendship from "./tables/ShowFriendship";
+import FormFriendship from "./forms/FormFriendship";
 
 export default function Dialogs() {
   return (
@@ -55,11 +57,11 @@ export default function Dialogs() {
           </CardHeader>
           <CardContent>
             <GenericInfo
-              tableName="22"
-              createForm={<FormDeveloper />}
+              tableName="friendship"
+              createForm={<FormFriendship />}
               readForm={
                 <Suspense fallback={<h1>Loading</h1>}>
-                  <ShowDeveloper />
+                  <ShowFriendship />
                 </Suspense>
               }
             />
